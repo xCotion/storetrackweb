@@ -1,0 +1,30 @@
+/* Assuming you have a container for the sidebar toggle */
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  margin-top: 0.5rem; /* Adjust this value to match the mode toggle height */
+}
+
+/* Adjust the container that holds the sidebar toggle and title */
+.header-content {
+  display: flex;
+  align-items: flex-start; /* Align items to the top */
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* If you have a title next to the toggle */
+.header-title {
+  margin: 0;
+  padding-top: 0.5rem; /* Match the toggle's margin-top */
+}
+
+/* If you need to adjust the header/navbar layout */
+.navbar, .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  /* ... other existing styles ... */
+} 
