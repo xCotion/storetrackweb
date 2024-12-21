@@ -3,35 +3,53 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TeamFormData } from "@/types/onboarding";
+
+interface TeamFormProps {
+  onSubmit: (data: TeamFormData) => void;
+  isLoading: boolean;
+}
 
 export const TeamForm = ({
   onSubmit,
   isLoading,
-}: {
-  onSubmit: (data: { memberName: string; role: string }) => void;
-  isLoading: boolean;
-}) => {
+}: TeamFormProps) => {
+  const [memberName, setMemberName] = React.useState("");
+  const [role, setRole] = React.useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({
+      memberName,
+      role
+    });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        const data = {
-          memberName: (document.getElementById("memberName") as HTMLInputElement).value,
-          role: (document.getElementById("role") as HTMLInputElement).value,
-        };
-        onSubmit(data);
-      }}
-      className="space-y-4"
-    >
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label>Team Member Name</Label>
-        <Input id="memberName" placeholder="Enter team member name" />
+        <Input 
+          value={memberName}
+          onChange={(e) => setMemberName(e.target.value)}
+          placeholder="Enter team member name"
+          required
+        />
       </div>
       <div className="space-y-2">
         <Label>Role</Label>
-        <Input id="role" placeholder="e.g. Manager, Sales, Support" />
+        <Input 
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          placeholder="e.g. Manager, Sales, Support"
+          required
+        />
       </div>
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button 
+        type="submit"
+        className="w-full"
+        disabled={isLoading}
+      >
         {isLoading ? "Adding..." : "Add Team Member"}
       </Button>
     </form>

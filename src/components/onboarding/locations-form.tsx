@@ -3,34 +3,46 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LocationsFormData } from "@/types/onboarding";
+
+interface LocationsFormProps {
+  onSubmit: (data: LocationsFormData) => void;
+  isLoading: boolean;
+}
 
 export const LocationsForm = ({
   onSubmit,
   isLoading,
-}: {
-  onSubmit: () => void;
-  isLoading: boolean;
-}) => {
+}: LocationsFormProps) => {
+  const [locationName, setLocationName] = React.useState("");
+  const [address, setAddress] = React.useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({
+      locationName,
+      address
+    });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}
-      className="space-y-4"
-    >
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label>Location Name</Label>
         <Input 
-          id="locationName" 
+          value={locationName}
+          onChange={(e) => setLocationName(e.target.value)}
           placeholder="Enter location name"
+          required
         />
       </div>
       <div className="space-y-2">
         <Label>Address</Label>
         <Input 
-          id="address" 
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
           placeholder="Enter address"
+          required
         />
       </div>
       <Button 

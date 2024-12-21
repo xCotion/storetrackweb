@@ -39,33 +39,6 @@ export const MultiStepLoader = ({
     if (progress.hasBusiness && progress.hasLocations && progress.hasProducts && progress.hasTeamMembers) {
       const startTime = Date.now();
       const duration = 5000;
-
-      const timer = setInterval(() => {
-        const elapsed = Date.now() - startTime;
-        const remaining = Math.max(0, duration - elapsed);
-        setCountdown(Math.ceil(remaining / 1000));
-        setProgressValue(Math.min(100, (elapsed / duration) * 100));
-
-        if (remaining <= 0) {
-          clearInterval(timer);
-          onClose();
-        }
-      }, 50);
-
-      return () => clearInterval(timer);
-    }
-  }, [progress, onClose]);
-
-  useEffect(() => {
-    const requiredStepsCompleted =
-      progress.hasBusiness &&
-      progress.hasLocations &&
-      (!steps[2].required || progress.hasProducts) &&
-      (!steps[3].required || progress.hasTeamMembers);
-  
-    if (requiredStepsCompleted) {
-      const startTime = Date.now();
-      const duration = 5000;
       const timer = setInterval(() => {
         const elapsed = Date.now() - startTime;
         const remaining = Math.max(0, duration - elapsed);
@@ -79,11 +52,28 @@ export const MultiStepLoader = ({
       return () => clearInterval(timer);
     }
   }, [progress, onClose]);
-  
+
+  const handleBusinessSubmit = async (data: BusinessFormData) => {
+    await onStepAction(0, data);
+  };
+
+  const handleLocationSubmit = async (data: LocationsFormData) => {
+    await onStepAction(1, data);
+  };
+
+  const handleProductSubmit = async (data: ProductsFormData) => {
+    await onStepAction(2, data);
+  };
+
+  const handleTeamSubmit = async (data: TeamFormData) => {
+    await onStepAction(3, data);
+  };
+
+  const isComplete = progress.hasBusiness && progress.hasLocations && 
+                    progress.hasProducts && progress.hasTeamMembers;
 
   const renderStepForm = (step: number) => {
-    if (progress.hasBusiness  && progress.hasLocations && progress.hasProducts && progress.hasTeamMembers) {
-      // Show the "All Set!" message
+    if (isComplete) {
       return (
         <div className="text-center space-y-4">
           <h3 className="text-xl font-semibold">All Set!</h3>
@@ -105,54 +95,32 @@ export const MultiStepLoader = ({
       case 0:
         return (
           <BusinessForm
-            onSubmit={async (data: BusinessFormData) => {
-              await onStepAction(0, data);
-            }}
-            onNext={() => {
-              onStepAction(0);
-            }}
+            onSubmit={handleBusinessSubmit}
+            onNext={() => {}}
             isLoading={isLoading}
           />
         );
-        case 1:
-          return (
-            <LocationsForm
-              onSubmit={async () => {
-                const data: LocationsFormData = {
-                  locationName: "",
-                  address: ""
-                };
-                await onStepAction(1, data);
-              }}
-              isLoading={isLoading}
-            />
-          );
-          case 2:
-            return (
-              <ProductsForm
-                onSubmit={async (data) => {
-                  await onStepAction(2, data);
-                  // Reset the form data after submission
-                  data.productName = "";
-                  data.price = "";
-                }}
-                isLoading={isLoading}
-              />
-            );          
-            case 3:
-              return (
-                <TeamForm
-                  onSubmit={async () => {
-                    const data: TeamFormData = {
-                      memberName: "",
-                      role: ""
-                    };
-                    await onStepAction(3, data);
-                  }}
-                  isLoading={isLoading}
-                />
-              );            
-            
+      case 1:
+        return (
+          <LocationsForm
+            onSubmit={handleLocationSubmit}
+            isLoading={isLoading}
+          />
+        );
+      case 2:
+        return (
+          <ProductsForm
+            onSubmit={handleProductSubmit}
+            isLoading={isLoading}
+          />
+        );
+      case 3:
+        return (
+          <TeamForm
+            onSubmit={handleTeamSubmit}
+            isLoading={isLoading}
+          />
+        );
       default:
         return null;
     }

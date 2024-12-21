@@ -1,14 +1,33 @@
+"use client";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { MultiStepLoader } from "@/components/ui/multi-step-loader";
-import { OnboardingProgress } from "@/types/onboarding";
 
 const steps = [
-  { text: "Create your business profile", required: true },
-  { text: "Add business locations", required: true },
-  { text: "Add products", required: false },
-  { text: "Add team members", required: false },
+  {
+    text: "Create your business profile",
+    required: true,
+  },
+  {
+    text: "Add business locations",
+    required: true,
+  },
+  {
+    text: "Add products",
+    required: false,
+  },
+  {
+    text: "Add team members",
+    required: false,
+  },
 ];
+
+export interface OnboardingProgress {
+  hasBusiness: boolean;
+  hasLocations: boolean;
+  hasProducts: boolean;
+  hasTeamMembers: boolean;
+}
 
 export const OnboardingFlow = ({
   isVisible = false,
@@ -22,10 +41,10 @@ export const OnboardingFlow = ({
   isVisible: boolean;
   onComplete: () => void;
   currentProgress: OnboardingProgress;
-  onCreateBusiness: (data: any) => Promise<void>;
-  onAddLocations: (data: any) => Promise<void>;
-  onAddProducts: (data: any) => Promise<void>;
-  onAddTeamMembers: (data: any) => Promise<void>;
+  onCreateBusiness: () => Promise<void>;
+  onAddLocations: () => Promise<void>;
+  onAddProducts: () => Promise<void>;
+  onAddTeamMembers: () => Promise<void>;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -33,8 +52,8 @@ export const OnboardingFlow = ({
   const getCurrentStep = () => {
     if (!currentProgress.hasBusiness) return 0;
     if (!currentProgress.hasLocations) return 1;
-    if (!currentProgress.hasProducts && steps[2].required) return 2;
-    if (!currentProgress.hasTeamMembers && steps[3].required) return 3;
+    if (!currentProgress.hasProducts) return 2;
+    if (!currentProgress.hasTeamMembers) return 3;
     return 4;
   };
 
@@ -47,34 +66,20 @@ export const OnboardingFlow = ({
     try {
       switch (step) {
         case 0:
-          if (!data?.businessName) {
-            throw new Error("Invalid business data");
-          }
-          await onCreateBusiness(data);
-          setCurrentStepIndex(1);
+          await onCreateBusiness();
           break;
         case 1:
-          if (!data?.locationName) {
-            throw new Error("Invalid location data");
-          }
-          await onAddLocations(data);
-          setCurrentStepIndex(2);
+          await onAddLocations();
           break;
         case 2:
-          if (!data?.productName) {
-            throw new Error("Invalid product data");
-          }
-          await onAddProducts(data);
-          setCurrentStepIndex(3);
+          await onAddProducts();
           break;
         case 3:
-          if (!data?.memberName) {
-            throw new Error("Invalid team member data");
-          }
-          await onAddTeamMembers(data);
-          setCurrentStepIndex(4);
+          await onAddTeamMembers();
           break;
       }
+      // Automatically move to next step after successful completion
+      setCurrentStepIndex(prev => prev + 1);
     } catch (error) {
       console.error("Error in step action:", error);
     } finally {
