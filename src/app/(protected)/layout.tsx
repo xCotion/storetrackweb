@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { MultiStepLoader } from "@/components/ui/multi-step-loader";
 import { ThemeProvider } from "next-themes";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -72,12 +72,13 @@ export default function ProtectedLayout({
   ];
 
   return (
-    <div className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background`}>
+    <div className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background flex`}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <SidebarProvider>
-          <div className="flex min-h-screen">
-            <AppSidebar />
-            <main className="flex-1">
+          <AppSidebar />
+          <div className="flex-1 flex flex-col">
+            <SidebarTrigger />
+            <main className="flex-1 overflow-y-auto pl-6 pr-6"> {/* Added padding to the right */}
               <MultiStepLoader
                 steps={steps}
                 visible={showOnboarding}

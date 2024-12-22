@@ -1,13 +1,12 @@
 "use client"
 
-import { ArrowDownFromLine, ArrowUpFromLine, TrendingUp } from "lucide-react"
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
+import * as React from "react"
+import { Area, AreaChart, CartesianGrid, XAxis, ResponsiveContainer } from "recharts"
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -19,73 +18,118 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+
+
+
+interface ChartDataItem {
+  date: string;
+  desktop: number;
+  mobile: number;
+}
+const chartData: ChartDataItem[] = [
+  { date: "2024-04-01", desktop: 222, mobile: 150 },
+  { date: "2024-04-02", desktop: 97, mobile: 180 },
+  { date: "2024-04-03", desktop: 167, mobile: 120 },
+  // ... (rest of your chart data)
+  { date: "2024-06-30", desktop: 446, mobile: 400 },
+];
 
 const chartConfig = {
+  visitors: {
+    label: "Visitors",
+  },
   desktop: {
     label: "Desktop",
     color: "hsl(var(--chart-1))",
-    icon: ArrowDownFromLine,
   },
   mobile: {
     label: "Mobile",
     color: "hsl(var(--chart-2))",
-    icon: ArrowUpFromLine,
   },
 } satisfies ChartConfig
 
-export function Component() {
+export function AreaChartComponent() {
+  const uniqueId = React.useId()
+
   return (
-    <Card>
-      <CardHeader className="items-center pb-4">
-        <CardTitle>Radar Chart - Icons</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+    <ChartContainer config={chartConfig} className="h-[250px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart
+          data={chartData}
+          margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
         >
-          <RadarChart
-            data={chartData}
-            margin={{
-              top: -40,
-              bottom: -10,
+          <defs>
+            <linearGradient id={`fillDesktop-${uniqueId}`} x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="5%"
+                stopColor="var(--color-desktop)"
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="95%"
+                stopColor="var(--color-desktop)"
+                stopOpacity={0.1}
+              />
+            </linearGradient>
+            <linearGradient id={`fillMobile-${uniqueId}`} x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="5%"
+                stopColor="var(--color-mobile)"
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="95%"
+                stopColor="var(--color-mobile)"
+                stopOpacity={0.1}
+              />
+            </linearGradient>
+          </defs>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="date"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            minTickGap={32}
+            tickFormatter={(value) => {
+              const date = new Date(value)
+              return date.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+              })
             }}
-          >
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <PolarAngleAxis dataKey="month" />
-            <PolarGrid />
-            <Radar
-              dataKey="desktop"
-              fill="var(--color-desktop)"
-              fillOpacity={0.6}
-            />
-            <Radar dataKey="mobile" fill="var(--color-mobile)" />
-            <ChartLegend className="mt-8" content={<ChartLegendContent />} />
-          </RadarChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col gap-2 pt-4 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="flex items-center gap-2 leading-none text-muted-foreground">
-          January - June 2024
-        </div>
-      </CardFooter>
-    </Card>
+          />
+          <ChartTooltip
+            cursor={false}
+            content={
+              <ChartTooltipContent
+                labelFormatter={(value) => {
+                  return new Date(value).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })
+                }}
+                indicator="dot"
+              />
+            }
+          />
+          <Area
+            dataKey="mobile"
+            type="natural"
+            fill={`url(#fillMobile-${uniqueId})`}
+            stroke="var(--color-mobile)"
+            stackId="a"
+          />
+          <Area
+            dataKey="desktop"
+            type="natural"
+            fill={`url(#fillDesktop-${uniqueId})`}
+            stroke="var(--color-desktop)"
+            stackId="a"
+          />
+          <ChartLegend content={<ChartLegendContent />} />
+        </AreaChart>
+      </ResponsiveContainer>
+    </ChartContainer>
   )
 }

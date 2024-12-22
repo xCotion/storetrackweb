@@ -240,7 +240,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <ThemeProvider>
       <Sidebar 
-        variant="inset" 
+        variant="sidebar" 
         className="bg-[hsl(var(--sidebar))] border-r border-[hsl(var(--sidebar-border))]" 
         {...props}
       >
@@ -253,9 +253,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <Command className="size-4" />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">GigGrid</span>
-                    <span className="truncate text-xs">Enterprise</span>
-                  </div>
+  <a href="/account" className="flex flex-col"> {/* Use flex-col for vertical alignment */}
+    <span className="truncate font-semibold">GigGrid</span>
+    <span className="truncate text-xs">Enterprise</span>
+  </a>
+</div>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>

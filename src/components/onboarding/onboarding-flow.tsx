@@ -37,6 +37,7 @@ export const OnboardingFlow = ({
   onAddLocations,
   onAddProducts,
   onAddTeamMembers,
+  onClose,
 }: {
   isVisible: boolean;
   onComplete: () => void;
@@ -45,6 +46,7 @@ export const OnboardingFlow = ({
   onAddLocations: () => Promise<void>;
   onAddProducts: () => Promise<void>;
   onAddTeamMembers: () => Promise<void>;
+  onClose: () => void;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
