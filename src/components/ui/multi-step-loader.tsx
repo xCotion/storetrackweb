@@ -131,7 +131,7 @@ export const MultiStepLoader = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95">
       <div className="relative flex flex-col max-w-7xl w-full mx-auto px-12 min-h-[600px]">
-        <div className="absolute top-4 right-4 flex space-x-4">
+        <div className="absolute top-4 right-4">
           {canClose && (
             <Button
               variant="ghost"
@@ -140,13 +140,6 @@ export const MultiStepLoader = ({
               Skip remaining steps
             </Button>
           )}
-          <Button
-            variant="ghost"
-            className="text-orange-500"
-            onClick={onClose}
-          >
-            Close (Dev)
-          </Button>
         </div>
         <div className="flex w-full gap-16 items-center">
           <div className="w-2/5 space-y-8 self-center">
@@ -175,7 +168,7 @@ export const MultiStepLoader = ({
             ))}
           </div>
 
-          <div className="w-3/5 self-center">
+          <div className="w-3/5 self-center space-y-4">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -187,6 +180,15 @@ export const MultiStepLoader = ({
                 {renderStepForm(currentStep)}
               </motion.div>
             </AnimatePresence>
+            <div className="flex justify-end">
+              <Button
+                variant="ghost"
+                className="text-orange-500"
+                onClick={onClose}
+              >
+                Close (Dev)
+              </Button>
+            </div>
           </div>
         </div>
       </div>

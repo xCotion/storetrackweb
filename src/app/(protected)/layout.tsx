@@ -77,8 +77,10 @@ export default function ProtectedLayout({
         <SidebarProvider>
           <AppSidebar />
           <div className="flex-1 flex flex-col">
-            <SidebarTrigger />
-            <main className="flex-1 overflow-y-auto pl-6 pr-6"> {/* Added padding to the right */}
+            <div className="flex items-center justify-between px-6">
+              <SidebarTrigger className="h-9 w-9 mt-8" />
+            </div>
+            <main className="flex-1 overflow-y-auto px-6">
               <MultiStepLoader
                 steps={steps}
                 visible={showOnboarding}
