@@ -248,16 +248,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild>
-                <a href="#">
+                <a href="/account">
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <Command className="size-4" />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-  <a href="/account" className="flex flex-col"> {/* Use flex-col for vertical alignment */}
-    <span className="truncate font-semibold">GigGrid</span>
-    <span className="truncate text-xs">Enterprise</span>
-  </a>
-</div>
+                    <div className="flex flex-col">
+                      <span className="truncate font-semibold">GigGrid</span>
+                      <span className="truncate text-xs">Enterprise</span>
+                    </div>
+                  </div>
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
