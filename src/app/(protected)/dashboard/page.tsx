@@ -53,20 +53,20 @@ export default function Page() {
           icon={DollarSign}
         />
         <StatsCard
-          title="Subscriptions"
+          title="Sales"
           value="+2,350"
           change="+180.1% from last month"
-          icon={Users}
+          icon={CreditCard}
         />
         <StatsCard
-          title="Sales"
+          title="Site Traffic"
           value="+12,234"
           change="+19% from last month"
           icon={CreditCard}
         />
         <StatsCard
           title="Active Now"
-          value="+573"
+          value="+70"
           change="+201 since last hour"
           icon={Activity}
         />
@@ -76,9 +76,9 @@ export default function Page() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>Area Chart - Gradient</CardTitle>
+            <CardTitle>Revenue</CardTitle>
             <CardDescription>
-              Showing total visitors for the last 6 months
+              Showing Revenue for the last 6 months
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -100,7 +100,7 @@ export default function Page() {
 
         <Card className="col-span-2">
           <CardHeader>
-            <CardTitle>Performance</CardTitle>
+            <CardTitle>Best Sellers</CardTitle>
             <CardDescription>Monthly performance metrics</CardDescription>
           </CardHeader>
           <CardContent>
@@ -112,7 +112,7 @@ export default function Page() {
       {/* Visitors Chart */}
       <Card>
         <CardHeader>
-          <CardTitle>Visitors</CardTitle>
+          <CardTitle>Site Traffic</CardTitle>
           <CardDescription>Interactive area chart showing visitor data</CardDescription>
         </CardHeader>
         <CardContent>
